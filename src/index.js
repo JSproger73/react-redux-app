@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import ReactDOM from "react-dom/client";
-import { taskCompleated, titleChanged, taskDeleted } from "./store/task";
-import configureStore from "./store/store";
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import { taskCompleated, titleChanged, taskDeleted } from './store/task';
+import configureStore from './store/store';
 
 const store = configureStore();
 
@@ -14,7 +14,9 @@ const App = () => {
   }, []);
 
   const compleateTask = (taskId) => {
-    store.dispatch(taskCompleated(taskId));
+    store.dispatch(() => {
+      store.dispatch(taskCompleated(taskId));
+    });
   };
 
   const changeTitle = (taskId) => {
@@ -45,9 +47,9 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>
+  </React.StrictMode>,
 );
