@@ -1,39 +1,36 @@
-const TASK_UPDATED = "task/updated";
-const TASK_DELETED = "task/deleted";
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState = [
+  { id: 1, title: "Task_1", compleated: false },
+  { id: 2, title: "Task_2", compleated: false }
+];
+
+const taskSlice = createSlice({
+  name: "task",
+  initialState,
+  reducers: {
+    update(state, action) {
+      const elementIndex = state.findIndex((el) => el.id === action.payload.id);
+      state[elementIndex] = { ...state[elementIndex], ...action.payload };
+    },
+    remove(state, action) {
+      return state.filter((el) => el.id !== action.payload.id);
+    }
+  }
+});
+
+const { actions, reducer: taskReducer } = taskSlice;
+const { update, remove } = actions;
 
 export function taskCompleated(id) {
-  return { type: TASK_UPDATED, payload: { id, compleated: true } };
+  return update({ id, compleated: true });
 }
 export function titleChanged(id) {
-  return {
-    type: TASK_UPDATED,
-    payload: { id, title: `New title for ${id}` }
-  };
+  return update({ id, title: `New title for ${id}` });
 }
 
 export function taskDeleted(id) {
-  return {
-    type: TASK_DELETED,
-    payload: { id }
-  };
+  return remove({ id });
 }
-function taskReducer(state = [], action) {
-  switch (action.type) {
-    case TASK_UPDATED: {
-      const newArray = [...state];
-      const elementIndex = newArray.findIndex(
-        (el) => el.id === action.payload.id
-      );
-      newArray[elementIndex] = { ...newArray[elementIndex], ...action.payload };
-      return newArray;
-    }
-    case TASK_DELETED: {
-      const newArray = state.filter((el) => el.id !== action.payload.id);
-      return newArray;
-    }
 
-    default:
-      return state;
-  }
-}
 export default taskReducer;
