@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import ReactDOM from 'react-dom/client';
-import { taskCompleated, titleChanged, taskDeleted } from './store/task';
-import configureStore from './store/store';
+import React, { useEffect, useState } from "react";
+import ReactDOM from "react-dom/client";
+import { completeTask, titleChanged, taskDeleted } from "./store/task";
+import configureStore from "./store/store";
 
 const store = configureStore();
 
@@ -12,12 +12,6 @@ const App = () => {
       setState(store.getState());
     });
   }, []);
-
-  const compleateTask = (taskId) => {
-    store.dispatch(() => {
-      store.dispatch(taskCompleated(taskId));
-    });
-  };
 
   const changeTitle = (taskId) => {
     store.dispatch(titleChanged(taskId));
@@ -36,7 +30,9 @@ const App = () => {
           <li key={el.id}>
             <p>{el.title}</p>
             <p>{`Compleated: ${el.compleated}`}</p>
-            <button onClick={() => compleateTask(el.id)}>Compleated</button>
+            <button onClick={() => store.dispatch(completeTask(el.id))}>
+              Complete
+            </button>
             <button onClick={() => changeTitle(el.id)}>Change title</button>
             <button onClick={() => deleteTask(el.id)}>Delete</button>
             <hr />
@@ -47,9 +43,9 @@ const App = () => {
   );
 };
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <App />
-  </React.StrictMode>,
+  </React.StrictMode>
 );
